@@ -1,0 +1,8 @@
+version: '3'
+services:
+  php-dev:
+    build: .
+    ports:
+      - "8090:80"
+    volumes:
+      - ./src:/var/www/html
