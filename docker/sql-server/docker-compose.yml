@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  sql-server-db:
+    container_name: db1
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    env_file:
+      - .env
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+      - ACCEPT_EULA=${ACCEPT_EULA}
