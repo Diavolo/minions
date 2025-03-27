@@ -15,14 +15,44 @@
 # CV Documentado
 #
 set -e
-# apt install qpdf
 
-cd ~/Areas/me/cv
+# Verify if qpdf is installed
+if ! command -v qpdf &> /dev/null; then
+    echo "qpdf is not installed."
+    echo "Please install qpdf with: sudo apt install qpdf"
+    exit 1
+fi
 
-CV_FILE="gustavo-huarcaya-fullstack-cv.pdf"
+# Verify if there are 3 arguments
+if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <work-dir> <cv-file> <output-file>"
+    exit 1
+fi
 
-# Output filename
-OUTPUT_FILE="documentado.pdf"
+# Working directory (e.g.: ~/Areas/me/cv)
+WORK_DIR=$1
+
+# CV filename (e.g.: cv-simple.pdf)
+CV_FILE=$2;
+
+# Output filename (e.g.: cv-documentado.pdf)
+OUTPUT_FILE=$3;
+
+# Verify if WORK_DIR exists
+if [[ ! -d "$WORK_DIR" ]]; then
+    echo "Directory not found: $WORK_DIR"
+    exit 1
+fi
+
+# Verify if CV_FILE exists
+if [[ ! -f "$CV_FILE" ]]; then
+    echo "File not found: $CV_FILE"
+    exit 1
+fi
+
+# Change to working directory
+cd $WORK_DIR
+
 TEMP_DIR="temp_pdfs"
 
 WORK_PDF="work.pdf"
@@ -33,8 +63,8 @@ TODAY=$(date +%Y-%m-%d-%H%M%S)
 
 # Backup OUTPUT_FILE if it exists
 if [[ -f "$OUTPUT_FILE" ]]; then
-    BACKUP_FILE="${TODAY}-${OUTPUT_FILE}"
-    mv "$OUTPUT_FILE" "$BACKUP_FILE"
+    BACKUP_FILE="${TODAY}-$(basename $OUTPUT_FILE)"
+    mv $(basename "$OUTPUT_FILE") "$BACKUP_FILE"
     echo "Backup created: $BACKUP_FILE"
 fi
 
